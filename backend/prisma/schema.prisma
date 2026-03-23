@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  username      String         @unique
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  role          Role           @default(FREE)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  borrowRecords BorrowRecord[]
+  enrollments   Enrollment[]
+
+  @@map("users")
+}
+
+model Resource {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  type        ResourceType
+  isPremium   Boolean      @default(false) @map("is_premium")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  book        Book?
+  course      Course?
+
+  @@map("resources")
+}
+
+model Book {
+  id              String         @id
+  author          String
+  isbn            String?        @unique
+  availableCopies Int            @default(1) @map("available_copies")
+  totalCopies     Int            @default(1) @map("total_copies")
+  resource        Resource       @relation(fields: [id], references: [id], onDelete: Cascade)
+  borrowRecords   BorrowRecord[]
+
+  @@map("books")
+}
+
+model Course {
+  id            String       @id
+  instructor    String
+  durationHours Int          @map("duration_hours")
+  modules       Json         @default("[]")
+  resource      Resource     @relation(fields: [id], references: [id], onDelete: Cascade)
+  enrollments   Enrollment[]
+
+  @@map("courses")
+}
+
+model BorrowRecord {
+  id         String       @id @default(uuid())
+  userId     String       @map("user_id")
+  bookId     String       @map("book_id")
+  borrowedAt DateTime     @default(now()) @map("borrowed_at")
+  dueDate    DateTime     @map("due_date")
+  returnedAt DateTime?    @map("returned_at")
+  status     BorrowStatus @default(ACTIVE)
+  user       User         @relation(fields: [userId], references: [id])
+  book       Book         @relation(fields: [bookId], references: [id])
+
+  @@map("borrow_records")
+}
+
+model Enrollment {
+  id              String           @id @default(uuid())
+  userId          String           @map("user_id")
+  courseId        String           @map("course_id")
+  enrolledAt      DateTime         @default(now()) @map("enrolled_at")
+  progressPercent Int              @default(0) @map("progress_percent")
+  completedAt     DateTime?        @map("completed_at")
+  status          EnrollmentStatus @default(ACTIVE)
+  user            User             @relation(fields: [userId], references: [id])
+  course          Course           @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+enum Role {
+  FREE
+  PREMIUM
+  ADMIN
+}
+
+enum ResourceType {
+  BOOK
+  COURSE
+}
+
+enum BorrowStatus {
+  ACTIVE
+  RETURNED
+  OVERDUE
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
