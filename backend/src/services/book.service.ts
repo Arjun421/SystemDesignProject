@@ -1,24 +1,31 @@
+import { BorrowWorkflow, ReturnWorkflow } from '../patterns/borrow-workflow.template'
 import { bookRepository } from '../repositories/book.repository'
-import { userRepository } from '../repositories/user.repository'
+import prisma from '../config/prisma'
+
+const borrowWorkflow = new BorrowWorkflow()
+const returnWorkflow = new ReturnWorkflow()
 
 export const bookService = {
-  borrowBook: async (userId: string, bookId: string) => {
-    const book = await bookRepository.findById(bookId)
-    if (!book) throw { status: 404, message: 'Book not found' }
-
-    // Premium access check
-    const user = await userRepository.findById(userId)
-    if (book.resource.isPremium && user?.role === 'FREE') {
-      throw { status: 403, message: 'Premium subscription required' }
-    }
-
-    return bookRepository.borrow(userId, bookId)
+  borrowBook: (userId: string, bookId: string) => {
+    return borrowWorkflow.run({ userId, bookId })
   },
 
-  returnBook: async (userId: string, bookId: string) => {
-    const book = await bookRepository.findById(bookId)
-    if (!book) throw { status: 404, message: 'Book not found' }
+  returnBook: (userId: string, bookId: string) => {
+    return returnWorkflow.run({ userId, bookId })
+  },
 
-    return bookRepository.return(userId, bookId)
+  getBorrowHistory: (userId: string) => {
+    return prisma.borrowRecord.findMany({
+      where: { userId },
+      include: { book: { include: { resource: true } } },
+      orderBy: { borrowedAt: 'desc' },
+    })
+  },
+
+  getActiveBorrows: (userId: string) => {
+    return prisma.borrowRecord.findMany({
+      where: { userId, status: 'ACTIVE' },
+      include: { book: { include: { resource: true } } },
+    })
   },
 }
