@@ -14,7 +14,7 @@ export const resourceController = {
           page: page ? parseInt(page as string) : 1,
           limit: limit ? parseInt(limit as string) : 10,
         },
-        req.user?.userId
+        req.jwtUser?.userId
       )
       res.json({ success: true, ...result })
     } catch (err: any) {
@@ -24,7 +24,7 @@ export const resourceController = {
 
   getById: async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const resource = await resourceProxy.getById(req.params.id as string, req.user?.userId)
+      const resource = await resourceProxy.getById(req.params.id as string, req.jwtUser?.userId)
       res.json({ success: true, data: resource })
     } catch (err: any) {
       res.status(err.status || 500).json({ success: false, error: err.message || 'Internal server error' })

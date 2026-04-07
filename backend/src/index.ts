@@ -1,5 +1,8 @@
 import express from 'express'
+import cors from 'cors'
 import dotenv from 'dotenv'
+import passport from 'passport'
+import './config/passport' // register Google strategy
 import authRoutes from './routes/auth.routes'
 import resourceRoutes from './routes/resource.routes'
 import bookRoutes from './routes/book.routes'
@@ -10,7 +13,9 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3000
 
+app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'], credentials: true }))
 app.use(express.json())
+app.use(passport.initialize())
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' })

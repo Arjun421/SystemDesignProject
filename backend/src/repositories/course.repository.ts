@@ -19,6 +19,14 @@ export const courseRepository = {
     })
   },
 
+  myEnrollments: (userId: string) => {
+    return prisma.enrollment.findMany({
+      where: { userId },
+      include: { course: { include: { resource: true } } },
+      orderBy: { enrolledAt: 'desc' },
+    })
+  },
+
   updateProgress: async (userId: string, courseId: string, progress: number) => {
     const enrollment = await prisma.enrollment.findUnique({
       where: { userId_courseId: { userId, courseId } },

@@ -14,4 +14,8 @@ export const courseService = {
     }
     return courseRepository.updateProgress(userId, courseId, progress)
   },
+
+  myEnrollments: (userId: string) => {
+    return courseRepository.myEnrollments(userId)
+  },
 }
