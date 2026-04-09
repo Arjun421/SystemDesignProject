@@ -12,5 +12,12 @@ export const paginationQuerySchema = z.object({
 })
 
 export const idParamSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid('Invalid UUID format'),
+})
+
+// Search query schema for filtering resources
+export const searchQuerySchema = z.object({
+  q: z.string().optional(),
+  type: z.enum(['book', 'course']).optional(),
+  isPremium: z.coerce.boolean().optional(),
 })
