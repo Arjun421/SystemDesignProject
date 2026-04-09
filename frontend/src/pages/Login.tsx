@@ -104,10 +104,14 @@ export default function Login() {
 
         <div className="auth-divider" style={{marginTop: 20}}>OR</div>
 
-        <a
-          href="http://localhost:3000/api/auth/google"
+        <button
+          type="button"
           className="btn-google"
           style={{marginTop: 14}}
+          onClick={() => {
+            const base = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+            window.location.href = `${base}/api/auth/google`
+          }}
         >
           <svg width="18" height="18" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -116,7 +120,7 @@ export default function Login() {
             <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
           </svg>
           Continue with Google
-        </a>
+        </button>
 
         <p className="auth-footer">
           Don't have an account?{' '}
