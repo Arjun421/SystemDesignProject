@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dependencies
 **/node_modules/
 
@@ -23,3 +24,14 @@ pnpm-debug.log*
 
 # Local tooling
 .kiro/
+=======
+node_modules/
+.env
+dist/
+build/
+*.log
+frontend/node_modules/
+backend/node_modules/
+.vscode/
+package-lock.json
+>>>>>>> 2e32af8 (chore: remove node_modules from tracking and add .gitignore)
