@@ -738,3 +738,152 @@
   .footer-minimal-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
   .numbers-inner { gap: 32px; }
 }
+
+html[data-theme='dark'] .home {
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .hero-title,
+html[data-theme='dark'] .number-val,
+html[data-theme='dark'] .section-title,
+html[data-theme='dark'] .how-step-title,
+html[data-theme='dark'] .split-title,
+html[data-theme='dark'] .path-title,
+html[data-theme='dark'] .showcase-header-title,
+html[data-theme='dark'] .eco-title,
+html[data-theme='dark'] .cta-title,
+html[data-theme='dark'] .ui-card-title,
+html[data-theme='dark'] .ui-book-name,
+html[data-theme='dark'] .activity-text strong,
+html[data-theme='dark'] .ui-progress-pct,
+html[data-theme='dark'] .ui-stat-val,
+html[data-theme='dark'] .footer-brand {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .hero-sub,
+html[data-theme='dark'] .number-lbl,
+html[data-theme='dark'] .section-label,
+html[data-theme='dark'] .how-step-desc,
+html[data-theme='dark'] .split-label,
+html[data-theme='dark'] .split-desc,
+html[data-theme='dark'] .path-meta,
+html[data-theme='dark'] .showcase-header-sub,
+html[data-theme='dark'] .activity-text,
+html[data-theme='dark'] .activity-time,
+html[data-theme='dark'] .eco-desc,
+html[data-theme='dark'] .cta-sub,
+html[data-theme='dark'] .ui-book-meta,
+html[data-theme='dark'] .ui-progress-label,
+html[data-theme='dark'] .ui-stat-lbl,
+html[data-theme='dark'] .footer-nav a {
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .footer-copy {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .split-list li {
+  color: var(--text-secondary);
+}
+
+html[data-theme='dark'] .split-cta {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+}
+
+html[data-theme='dark'] .hero-ui,
+html[data-theme='dark'] .path-card,
+html[data-theme='dark'] .showcase-panel,
+html[data-theme='dark'] .ecosystem-flow,
+html[data-theme='dark'] .ui-card {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+html[data-theme='dark'] .ui-topbar,
+html[data-theme='dark'] .showcase-header {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .btn-primary-dark {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .btn-primary-dark:hover {
+  background: var(--brand-dark-hover);
+}
+
+html[data-theme='dark'] .btn-cta {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .btn-cta:hover {
+  background: var(--brand-dark-hover);
+}
+
+html[data-theme='dark'] .btn-ghost-dark {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .btn-ghost-dark:hover,
+html[data-theme='dark'] .footer-nav a:hover {
+  border-color: var(--hero-link);
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .home-divider,
+html[data-theme='dark'] .numbers-strip,
+html[data-theme='dark'] .cta-section,
+html[data-theme='dark'] .eco-block + .eco-block,
+html[data-theme='dark'] .split-divider,
+html[data-theme='dark'] .footer-minimal {
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .section-alt,
+html[data-theme='dark'] .ui-stat,
+html[data-theme='dark'] .player-chapter.active,
+html[data-theme='dark'] .reader-line,
+html[data-theme='dark'] .path-icon,
+html[data-theme='dark'] .path-tag,
+html[data-theme='dark'] .how-tag {
+  background: var(--surface-3);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .ui-badge.grey {
+  background: var(--surface-3);
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .ui-progress-bar,
+html[data-theme='dark'] .path-progress-bar {
+  background: var(--surface-4);
+}
+
+html[data-theme='dark'] .ui-progress-fill,
+html[data-theme='dark'] .path-progress-fill,
+html[data-theme='dark'] .how-step-num,
+html[data-theme='dark'] .player-chapter-dot.active {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .player-video {
+  background: #0a0d14;
+}
+
+html[data-theme='dark'] .reader-highlight {
+  background: rgba(250,204,21,0.16);
+  border-left-color: var(--amber);
+}
+
+html[data-theme='dark'] .path-card:hover {
+  box-shadow: var(--shadow-elevated);
+}

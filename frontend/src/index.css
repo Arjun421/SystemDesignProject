@@ -2,8 +2,173 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background: #f6f7f9;
+}
+
+:root {
+  --page-bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f9fafb;
+  --surface-3: #f3f4f6;
+  --surface-4: #eef2f7;
+  --surface-hover: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
+  --border: #e5e7eb;
+  --border-soft: #f3f4f6;
+  --hero-bg: #0a0f1e;
+  --hero-text: #ffffff;
+  --hero-muted: #94a3b8;
+  --hero-link: #93c5fd;
+  --hero-chip-bg: rgba(255,255,255,0.08);
+  --hero-chip-border: rgba(255,255,255,0.12);
+  --hero-avatar-bg: #1e3a5f;
+  --hero-avatar-text: #93c5fd;
+  --brand-dark: #0a0f1e;
+  --brand-dark-hover: #162033;
+  --accent: #16a34a;
+  --accent-soft: #dcfce7;
+  --accent-border: #bbf7d0;
+  --accent-text: #15803d;
+  --amber: #d97706;
+  --amber-soft: #fef3c7;
+  --amber-text: #92400e;
+  --orange: #ea580c;
+  --orange-soft: #fff7ed;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-text: #dc2626;
+  --info-soft: #eff6ff;
+  --info-text: #1d4ed8;
+  --warning-soft: #fefce8;
+  --warning-border: #fde68a;
+  --warning-text: #a16207;
+  --input-bg: #ffffff;
+  --input-focus: #0f2b4c;
+  --overlay-fade: #ffffff;
+  --skeleton-base: #f3f4f6;
+  --skeleton-highlight: #e5e7eb;
+  --skeleton-hero-base: #1e293b;
+  --skeleton-hero-highlight: #243447;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.07);
+  --shadow-elevated: 0 6px 24px rgba(0,0,0,0.08);
+  --navy: #0a0f1e;
+  --navy-2: #111827;
+  --muted: #6b7280;
+  --muted-2: #9ca3af;
+  --bg: #ffffff;
+  --bg-off: #f9fafb;
+  --bg-subtle: #f3f4f6;
+  --green: #16a34a;
+  --green-lt: #dcfce7;
+  --green-text: #15803d;
+  --orange-lt: #fff7ed;
+  --amber-lt: #fef3c7;
+}
+
+html[data-theme='dark'] {
+  background: #0f1117;
+  --page-bg: #0f1117;
+  --surface: #171b24;
+  --surface-2: #121720;
+  --surface-3: #1d2330;
+  --surface-4: #202736;
+  --surface-hover: #21263a;
+  --text-primary: #f1f2f6;
+  --text-secondary: #d8dbe6;
+  --text-muted: #8b8fa8;
+  --text-faint: #70758b;
+  --border: rgba(255,255,255,0.1);
+  --border-soft: rgba(255,255,255,0.06);
+  --hero-bg: #0a0d14;
+  --hero-text: #f8fafc;
+  --hero-muted: #a8b2c6;
+  --hero-link: #93c5fd;
+  --hero-chip-bg: rgba(255,255,255,0.08);
+  --hero-chip-border: rgba(255,255,255,0.12);
+  --hero-avatar-bg: #1b3a5b;
+  --hero-avatar-text: #bfdbfe;
+  --brand-dark: #16a163;
+  --brand-dark-hover: #128252;
+  --accent: #22c55e;
+  --accent-soft: rgba(34,197,94,0.16);
+  --accent-border: rgba(74,222,128,0.28);
+  --accent-text: #86efac;
+  --amber: #fbbf24;
+  --amber-soft: rgba(251,191,36,0.16);
+  --amber-text: #fcd34d;
+  --orange: #fb923c;
+  --orange-soft: rgba(251,146,60,0.16);
+  --danger: #f87171;
+  --danger-soft: rgba(248,113,113,0.14);
+  --danger-border: rgba(248,113,113,0.28);
+  --danger-text: #fca5a5;
+  --info-soft: rgba(96,165,250,0.16);
+  --info-text: #93c5fd;
+  --warning-soft: rgba(250,204,21,0.14);
+  --warning-border: rgba(250,204,21,0.24);
+  --warning-text: #fcd34d;
+  --input-bg: #111723;
+  --input-focus: #60a5fa;
+  --overlay-fade: #171b24;
+  --skeleton-base: #1b2330;
+  --skeleton-highlight: #2a3445;
+  --skeleton-hero-base: #0d1220;
+  --skeleton-hero-highlight: #182033;
+  --shadow-card: 0 12px 40px rgba(0,0,0,0.32);
+  --shadow-elevated: 0 14px 44px rgba(0,0,0,0.32);
+  --navy: #f1f2f6;
+  --navy-2: #e5e7eb;
+  --muted: #8b8fa8;
+  --muted-2: #70758b;
+  --bg: #171b24;
+  --bg-off: #121720;
+  --bg-subtle: #1d2330;
+  --green: #22c55e;
+  --green-lt: rgba(34,197,94,0.16);
+  --green-text: #86efac;
+  --orange-lt: rgba(251,146,60,0.16);
+  --amber-lt: rgba(251,191,36,0.16);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f9fafb;
-  color: #111827;
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--page-bg);
+  color: var(--text-primary);
 }

@@ -335,3 +335,96 @@
   .courses-body { padding: 28px 20px 60px; }
   .courses-grid { grid-template-columns: 1fr; }
 }
+
+html[data-theme='dark'] .courses-page {
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .courses-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='dark'] .courses-title,
+html[data-theme='dark'] .course-card-title,
+html[data-theme='dark'] .course-price-real {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .courses-subtitle,
+html[data-theme='dark'] .course-author,
+html[data-theme='dark'] .course-duration,
+html[data-theme='dark'] .page-info,
+html[data-theme='dark'] .courses-loading,
+html[data-theme='dark'] .courses-empty {
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .courses-search-input,
+html[data-theme='dark'] .topic-chip,
+html[data-theme='dark'] .btn-view-course,
+html[data-theme='dark'] .page-btn {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .courses-search-input::placeholder {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .courses-search-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.14);
+}
+
+html[data-theme='dark'] .courses-search-btn,
+html[data-theme='dark'] .btn-enroll-free,
+html[data-theme='dark'] .topic-chip.active {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+html[data-theme='dark'] .course-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .course-card:hover {
+  box-shadow: var(--shadow-elevated);
+}
+
+html[data-theme='dark'] .course-thumb,
+html[data-theme='dark'] .course-thumb-placeholder {
+  background: var(--surface-3);
+}
+
+html[data-theme='dark'] .course-thumb-placeholder,
+html[data-theme='dark'] .courses-loading-dot {
+  color: var(--text-faint);
+  background: var(--surface-4);
+}
+
+html[data-theme='dark'] .course-topic-tag,
+html[data-theme='dark'] .course-lang {
+  background: var(--surface-3);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .course-coupon-expiry {
+  color: var(--amber-text);
+}
+
+html[data-theme='dark'] .course-coupon-badge {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-color: var(--accent-border);
+}
+
+html[data-theme='dark'] .btn-view-course:hover,
+html[data-theme='dark'] .page-btn:hover:not(:disabled),
+html[data-theme='dark'] .topic-chip:hover {
+  border-color: var(--hero-link);
+  color: var(--hero-link);
+}

@@ -647,3 +647,205 @@
   .cd-hero { padding: 32px 20px 28px; }
   .cd-body { padding: 28px 20px 60px; }
 }
+
+html[data-theme='dark'] .cd-page {
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .cd-hero {
+  background: var(--hero-bg);
+}
+
+html[data-theme='dark'] .cd-title {
+  color: var(--hero-text);
+}
+
+html[data-theme='dark'] .cd-headline,
+html[data-theme='dark'] .cd-students,
+html[data-theme='dark'] .cd-instructor-row,
+html[data-theme='dark'] .cd-breadcrumb,
+html[data-theme='dark'] .cd-dot {
+  color: var(--hero-muted);
+}
+
+html[data-theme='dark'] .cd-breadcrumb span {
+  color: var(--hero-muted);
+}
+
+html[data-theme='dark'] .cd-breadcrumb a,
+html[data-theme='dark'] .cd-instructor-name {
+  color: var(--hero-link);
+}
+
+html[data-theme='dark'] .cd-lang-badge {
+  background: var(--hero-chip-bg);
+  color: var(--hero-muted);
+  border-color: var(--hero-chip-border);
+}
+
+html[data-theme='dark'] .cd-instructor-avatar {
+  background: var(--hero-avatar-bg);
+  color: var(--hero-avatar-text);
+}
+
+html[data-theme='dark'] .cd-hero-card,
+html[data-theme='dark'] .cd-progress-card,
+html[data-theme='dark'] .cd-section,
+html[data-theme='dark'] .cd-instructor-card,
+html[data-theme='dark'] .cd-rating-overview,
+html[data-theme='dark'] .cd-review-item,
+html[data-theme='dark'] .cd-cert-card,
+html[data-theme='dark'] .cd-sidebar-section,
+html[data-theme='dark'] .cd-mobile-price,
+html[data-theme='dark'] .cd-stat-card {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+html[data-theme='dark'] .cd-thumb,
+html[data-theme='dark'] .cd-thumb-placeholder {
+  background: #111827;
+}
+
+html[data-theme='dark'] .cd-play-btn {
+  color: var(--brand-dark);
+}
+
+html[data-theme='dark'] .btn-enroll-cta {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .btn-enroll-cta:hover {
+  background: var(--brand-dark-hover);
+}
+
+html[data-theme='dark'] .btn-wishlist,
+html[data-theme='dark'] .cd-share-btn {
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .btn-wishlist:hover,
+html[data-theme='dark'] .cd-share-btn:hover {
+  border-color: var(--hero-link);
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .btn-wishlist.saved {
+  color: var(--danger-text);
+  border-color: var(--danger);
+}
+
+html[data-theme='dark'] .cd-includes,
+html[data-theme='dark'] .cd-tabs,
+html[data-theme='dark'] .cd-lectures {
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .cd-includes-title,
+html[data-theme='dark'] .cd-progress-label,
+html[data-theme='dark'] .cd-section-name,
+html[data-theme='dark'] .cd-instructor-card-name,
+html[data-theme='dark'] .cd-reviews-title,
+html[data-theme='dark'] .cd-sidebar-section-title,
+html[data-theme='dark'] .cd-price-inr,
+html[data-theme='dark'] .cd-mobile-price-val,
+html[data-theme='dark'] .cd-section-heading,
+html[data-theme='dark'] .cd-stat-value {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .cd-include-item,
+html[data-theme='dark'] .cd-progress-sub,
+html[data-theme='dark'] .cd-tab,
+html[data-theme='dark'] .cd-description,
+html[data-theme='dark'] .cd-curriculum-meta,
+html[data-theme='dark'] .cd-section-meta,
+html[data-theme='dark'] .cd-lec-icon,
+html[data-theme='dark'] .cd-instructor-card-title,
+html[data-theme='dark'] .cd-instructor-bio,
+html[data-theme='dark'] .cd-rating-big-label,
+html[data-theme='dark'] .cd-rating-bar-row,
+html[data-theme='dark'] .cd-review-text,
+html[data-theme='dark'] .cd-cert-desc,
+html[data-theme='dark'] .cd-stat-label {
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .cd-progress-pct,
+html[data-theme='dark'] .cd-curriculum-title,
+html[data-theme='dark'] .cd-rating-big-val,
+html[data-theme='dark'] .cd-cert-title,
+html[data-theme='dark'] .cd-tab.active,
+html[data-theme='dark'] .cd-read-more,
+html[data-theme='dark'] .cd-lec-check.current,
+html[data-theme='dark'] .cd-lecture.active .cd-lec-name {
+  color: var(--hero-link);
+}
+
+html[data-theme='dark'] .cd-progress-bar,
+html[data-theme='dark'] .cd-rating-bar-track {
+  background: var(--surface-4);
+}
+
+html[data-theme='dark'] .cd-progress-fill {
+  background: linear-gradient(90deg, var(--brand-dark-hover), var(--brand-dark));
+}
+
+html[data-theme='dark'] .cd-tab.active {
+  border-bottom-color: var(--hero-link);
+}
+
+html[data-theme='dark'] .cd-tab:hover {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .cd-section-header {
+  background: var(--surface-3);
+}
+
+html[data-theme='dark'] .cd-section-header:hover,
+html[data-theme='dark'] .cd-lecture:hover {
+  background: var(--surface-4);
+}
+
+html[data-theme='dark'] .cd-lecture {
+  border-bottom-color: var(--border-soft);
+}
+
+html[data-theme='dark'] .cd-lecture.active {
+  background: var(--info-soft);
+}
+
+html[data-theme='dark'] .cd-lec-name,
+html[data-theme='dark'] .cd-review-name {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .cd-instructor-big-avatar {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .cd-lec-duration,
+html[data-theme='dark'] .cd-lec-locked,
+html[data-theme='dark'] .cd-review-date,
+html[data-theme='dark'] .cd-cert-locked {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .cd-coupon-expiry {
+  color: var(--danger-text);
+}
+
+html[data-theme='dark'] .skeleton {
+  background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-highlight) 50%, var(--skeleton-base) 75%);
+  background-size: 200% 100%;
+}
+
+html[data-theme='dark'] .skeleton-hero {
+  background: linear-gradient(90deg, var(--skeleton-hero-base) 25%, var(--skeleton-hero-highlight) 50%, var(--skeleton-hero-base) 75%);
+  background-size: 200% 100%;
+}

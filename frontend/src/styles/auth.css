@@ -335,3 +335,96 @@
   }
   .auth-heading { font-size: 20px; }
 }
+
+html[data-theme='dark'] .auth-page {
+  background: var(--page-bg);
+}
+
+html[data-theme='dark'] .auth-card {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+html[data-theme='dark'] .auth-brand-name,
+html[data-theme='dark'] .auth-heading,
+html[data-theme='dark'] .field-label {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .auth-subheading,
+html[data-theme='dark'] .checkbox-label,
+html[data-theme='dark'] .auth-footer,
+html[data-theme='dark'] .auth-divider {
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .auth-divider::before,
+html[data-theme='dark'] .auth-divider::after {
+  background: var(--border);
+}
+
+html[data-theme='dark'] .auth-alert.error {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+  border-color: var(--danger-border);
+}
+
+html[data-theme='dark'] .auth-alert.success {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-color: var(--accent-border);
+}
+
+html[data-theme='dark'] .field-input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .field-input::placeholder {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .field-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.14);
+}
+
+html[data-theme='dark'] .field-input.invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(248,113,113,0.14);
+}
+
+html[data-theme='dark'] .field-input.valid {
+  border-color: var(--accent);
+}
+
+html[data-theme='dark'] .field-icon-btn {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .field-icon-btn:hover,
+html[data-theme='dark'] .auth-link {
+  color: var(--hero-link);
+}
+
+html[data-theme='dark'] .auth-link:hover {
+  color: #bfdbfe;
+}
+
+html[data-theme='dark'] .strength-bar-seg {
+  background: var(--surface-3);
+}
+
+html[data-theme='dark'] .btn-google {
+  background: var(--surface);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .btn-google:hover {
+  background: var(--surface-2);
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: none;
+}

@@ -300,3 +300,95 @@
   .library-body { padding: 28px 20px 60px; }
   .library-grid { grid-template-columns: 1fr; }
 }
+
+html[data-theme='dark'] .library-page {
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .library-header {
+  border-bottom-color: var(--border);
+}
+
+html[data-theme='dark'] .library-eyebrow,
+html[data-theme='dark'] .library-title,
+html[data-theme='dark'] .book-card-title {
+  color: var(--text-primary);
+}
+
+html[data-theme='dark'] .library-subtitle,
+html[data-theme='dark'] .book-card-desc,
+html[data-theme='dark'] .book-meta-item,
+html[data-theme='dark'] .lib-page-info {
+  color: var(--text-muted);
+}
+
+html[data-theme='dark'] .library-search-input,
+html[data-theme='dark'] .btn-borrow-login,
+html[data-theme='dark'] .lib-page-btn {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .library-search-input::placeholder {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .library-search-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.14);
+}
+
+html[data-theme='dark'] .library-search-btn,
+html[data-theme='dark'] .btn-borrow {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .book-card-new {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .book-card-new:hover {
+  box-shadow: var(--shadow-elevated);
+}
+
+html[data-theme='dark'] .book-card-bar,
+html[data-theme='dark'] .copies-bar-fill {
+  background: var(--brand-dark);
+}
+
+html[data-theme='dark'] .book-badge-premium,
+html[data-theme='dark'] .btn-borrow-locked {
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  border-color: var(--warning-border);
+}
+
+html[data-theme='dark'] .book-meta-isbn,
+html[data-theme='dark'] .copies-bar-label,
+html[data-theme='dark'] .library-loading,
+html[data-theme='dark'] .library-empty {
+  color: var(--text-faint);
+}
+
+html[data-theme='dark'] .copies-bar {
+  background: var(--surface-3);
+}
+
+html[data-theme='dark'] .book-msg.ok {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+html[data-theme='dark'] .book-msg.err {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+
+html[data-theme='dark'] .btn-borrow-login:hover,
+html[data-theme='dark'] .lib-page-btn:hover:not(:disabled) {
+  border-color: var(--hero-link);
+  color: var(--hero-link);
+}

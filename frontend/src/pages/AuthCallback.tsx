@@ -28,7 +28,8 @@ export default function AuthCallback() {
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       minHeight: '100vh', flexDirection: 'column', gap: 12,
-      fontFamily: 'Inter, sans-serif', color: '#6b7280',
+      fontFamily: 'Inter, sans-serif', color: 'var(--text-muted)',
+      background: 'var(--page-bg)',
     }}>
       <div style={{ fontSize: 32 }}>⏳</div>
       <p style={{ fontSize: 15 }}>Signing you in with Google...</p>

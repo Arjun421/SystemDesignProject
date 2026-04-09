@@ -66,8 +66,8 @@ export default function CourseDetail() {
   if (error || !course) return (
     <div className="cd-page" style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'60vh', flexDirection:'column', gap:12 }}>
       <div style={{ fontSize:36 }}>⚠️</div>
-      <div style={{ fontSize:16, color:'#374151' }}>{error || 'Course not found'}</div>
-      <Link to="/courses" style={{ fontSize:14, color:'#0a0f1e', fontWeight:600 }}>← Back to Courses</Link>
+      <div style={{ fontSize:16, color:'var(--text-secondary)' }}>{error || 'Course not found'}</div>
+      <Link to="/courses" style={{ fontSize:14, color:'var(--text-primary)', fontWeight:600 }}>← Back to Courses</Link>
     </div>
   )
 
@@ -94,7 +94,7 @@ export default function CourseDetail() {
             <div className="cd-breadcrumb">
               <Link to="/courses">Courses</Link>
               {course.primary_category && <><span>›</span><span>{course.primary_category}</span></>}
-              {course.primary_subcategory && <><span>›</span><span style={{color:'#6b7280'}}>{course.primary_subcategory}</span></>}
+              {course.primary_subcategory && <><span>›</span><span style={{ color:'var(--hero-muted)' }}>{course.primary_subcategory}</span></>}
             </div>
 
             {course.topic && <div className="cd-topic-tag">{course.topic}</div>}
@@ -126,13 +126,13 @@ export default function CourseDetail() {
                   {authors[0].display_name}
                 </a>
                 {authors[0].job_title && (
-                  <span style={{color:'#64748b', fontSize:12}}>· {authors[0].job_title}</span>
+                  <span style={{ color:'var(--hero-muted)', fontSize:12 }}>· {authors[0].job_title}</span>
                 )}
               </div>
             )}
 
             {course.created_at && (
-              <div style={{fontSize:12, color:'#64748b', marginTop:10}}>
+              <div style={{ fontSize:12, color:'var(--hero-muted)', marginTop:10 }}>
                 Last updated {new Date(course.created_at).toLocaleDateString('en-IN', {month:'long', year:'numeric'})}
               </div>
             )}
@@ -210,7 +210,7 @@ export default function CourseDetail() {
               <div style={{ maxHeight: showFull ? 'none' : 220, overflow:'hidden', position:'relative' }}>
                 <div dangerouslySetInnerHTML={{ __html: course.description || '<p>No description available.</p>' }} />
                 {!showFull && (
-                  <div style={{ position:'absolute', bottom:0, left:0, right:0, height:64, background:'linear-gradient(transparent,#fff)' }} />
+                  <div style={{ position:'absolute', bottom:0, left:0, right:0, height:64, background:'linear-gradient(transparent,var(--overlay-fade))' }} />
                 )}
               </div>
               <button className="cd-read-more" onClick={() => setShowFull(v => !v)}>
@@ -256,7 +256,7 @@ export default function CourseDetail() {
                 </div>
                 <p className="cd-instructor-bio">
                   View full profile and all courses by this instructor on{' '}
-                  <a href={authors[0].url} target="_blank" rel="noopener noreferrer" style={{color:'#0a0f1e', fontWeight:600}}>
+                  <a href={authors[0].url} target="_blank" rel="noopener noreferrer" style={{ color:'var(--text-primary)', fontWeight:600 }}>
                     Udemy →
                   </a>
                 </p>
