@@ -48,37 +48,14 @@ const getTheme = (t: Theme) => ({
   redText: t === 'dark' ? '#fca5a5' : '#991b1b',
 })
 
-const SunIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-  </svg>
-)
-const MoonIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-  </svg>
-)
-const BookIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
-  </svg>
-)
-const GradCapIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-  </svg>
-)
 const CheckIcon = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12"/>
+    <polyline points="20 6 9 17 4 12" />
   </svg>
 )
 const ArrowRightIcon = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
   </svg>
 )
 
@@ -107,7 +84,7 @@ export default function Dashboard() {
         setActive(a.data.data)
         setHistory(h.data.data)
         setEnrollments(e.data.data)
-      } catch {}
+      } catch { }
       finally { setLoading(false) }
     }
     fetchData()
@@ -158,56 +135,6 @@ export default function Dashboard() {
       transition: 'background 0.3s, color 0.3s',
     } as React.CSSProperties,
 
-    header: {
-      background: c.surface,
-      borderBottom: `1px solid ${c.border}`,
-      position: 'sticky' as const,
-      top: 0,
-      zIndex: 10,
-    },
-    headerInner: {
-      maxWidth: 960,
-      margin: '0 auto',
-      padding: '0 1.5rem',
-      height: 64,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    logo: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 10,
-      fontWeight: 700,
-      fontSize: 17,
-      letterSpacing: '-0.3px',
-      color: c.text,
-      textDecoration: 'none',
-    },
-    logoIcon: {
-      width: 32,
-      height: 32,
-      background: '#0f4c35',
-      borderRadius: 8,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    themeBtn: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 6,
-      background: c.surfaceHover,
-      border: `1px solid ${c.border}`,
-      borderRadius: 8,
-      padding: '7px 12px',
-      cursor: 'pointer',
-      color: c.textMuted,
-      fontSize: 12,
-      fontFamily: 'inherit',
-      fontWeight: 500,
-      transition: 'all 0.2s',
-    },
 
     body: { maxWidth: 960, margin: '0 auto', padding: '2rem 1.5rem' },
 
@@ -480,36 +407,6 @@ export default function Dashboard() {
       `}</style>
 
       <div style={styles.root}>
-        {/* Header */}
-        <header style={styles.header}>
-          <div style={styles.headerInner}>
-            <a href="/" style={styles.logo}>
-              <div style={styles.logoIcon}>
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M3 4.5C3 3.67 3.67 3 4.5 3h4.5v12H4.5C3.67 15 3 14.33 3 13.5V4.5z" fill="#4CAF82"/>
-                  <path d="M9 3h4.5C14.33 3 15 3.67 15 4.5v9c0 .83-.67 1.5-1.5 1.5H9V3z" fill="white" opacity="0.6"/>
-                  <rect x="5" y="6" width="2.5" height="1.2" rx="0.5" fill="white"/>
-                  <rect x="5" y="8.5" width="2.5" height="1.2" rx="0.5" fill="white"/>
-                </svg>
-              </div>
-              LearnVault
-            </a>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <a href="/books" style={{ ...styles.themeBtn, textDecoration: 'none' }} className="lv-theme-btn">
-                <BookIcon /> Library
-              </a>
-              <a href="/courses" style={{ ...styles.themeBtn, textDecoration: 'none' }} className="lv-theme-btn">
-                <GradCapIcon /> Courses
-              </a>
-              <button onClick={toggleTheme} style={styles.themeBtn} className="lv-theme-btn">
-                {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-                {theme === 'light' ? 'Dark mode' : 'Light mode'}
-              </button>
-            </div>
-          </div>
-        </header>
-
         <div style={styles.body}>
           {/* Welcome */}
           <div style={styles.welcomeSection}>
