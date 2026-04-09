@@ -1,9 +1,5 @@
-/**
- * EnrollWorkflow — extends BaseWorkflow
- * Fixed steps: validate → execute (enroll) → postProcess
- */
-
 import { BaseWorkflow } from './base-workflow.template'
+import { forbidden, notFound } from '../errors/app-error'
 import { courseRepository } from '../repositories/course.repository'
 import { userRepository } from '../repositories/user.repository'
 
@@ -12,20 +8,27 @@ interface EnrollInput {
   courseId: string
 }
 
-export class EnrollWorkflow extends BaseWorkflow<EnrollInput, any> {
+export class EnrollWorkflow extends BaseWorkflow<EnrollInput, unknown> {
   protected async validate({ userId, courseId }: EnrollInput): Promise<void> {
-    const course = await courseRepository.findById(courseId)
-    if (!course) throw { status: 404, message: 'Course not found' }
+    const [course, user] = await Promise.all([
+      courseRepository.findById(courseId),
+      userRepository.findById(userId),
+    ])
 
-    const user = await userRepository.findById(userId)
-    if (!user) throw { status: 404, message: 'User not found' }
+    if (!course) {
+      throw notFound('Course not found')
+    }
+
+    if (!user) {
+      throw notFound('User not found')
+    }
 
     if (course.resource.isPremium && user.role === 'FREE') {
-      throw { status: 403, message: 'Premium subscription required' }
+      throw forbidden('Premium subscription required')
     }
   }
 
-  protected async execute({ userId, courseId }: EnrollInput): Promise<any> {
+  protected async execute({ userId, courseId }: EnrollInput): Promise<unknown> {
     return courseRepository.enroll(userId, courseId)
   }
 

@@ -1,9 +1,11 @@
+import { notFound } from '../errors/app-error'
 import { resourceRepository } from '../repositories/resource.repository'
 
 export const resourceService = {
   getAll: async (params: {
     search?: string
     type?: 'BOOK' | 'COURSE'
+    category?: string
     page?: number
     limit?: number
   }) => {
@@ -13,6 +15,7 @@ export const resourceService = {
     const [resources, total] = await resourceRepository.findAll({
       search: params.search,
       type: params.type,
+      category: params.category,
       page,
       limit,
     })
@@ -30,7 +33,9 @@ export const resourceService = {
 
   getById: async (id: string) => {
     const resource = await resourceRepository.findById(id)
-    if (!resource) throw { status: 404, message: 'Resource not found' }
+    if (!resource) {
+      throw notFound('Resource not found')
+    }
     return resource
   },
 }

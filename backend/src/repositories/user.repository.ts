@@ -11,6 +11,10 @@ export const userRepository = {
     return prisma.user.findUnique({ where: { email } })
   },
 
+  findByUsername: (username: string): Promise<User | null> => {
+    return prisma.user.findUnique({ where: { username } })
+  },
+
   create: (data: { username: string; email: string; passwordHash: string }): Promise<User> => {
     return prisma.user.create({ data })
   },

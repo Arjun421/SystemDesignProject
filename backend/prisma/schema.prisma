@@ -7,28 +7,35 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  username      String         @unique
-  email         String         @unique
-  passwordHash  String         @map("password_hash")
-  role          Role           @default(FREE)
-  createdAt     DateTime       @default(now()) @map("created_at")
-  borrowRecords BorrowRecord[]
-  enrollments   Enrollment[]
+  id                String             @id @default(uuid())
+  username          String             @unique
+  email             String             @unique
+  passwordHash      String             @map("password_hash")
+  role              Role               @default(FREE)
+  createdAt         DateTime           @default(now()) @map("created_at")
+  borrowRecords     BorrowRecord[]
+  enrollments       Enrollment[]
+  learningPaths     UserLearningPath[]
 
   @@map("users")
 }
 
 model Resource {
-  id          String       @id @default(uuid())
-  title       String
-  description String?
-  type        ResourceType
-  isPremium   Boolean      @default(false) @map("is_premium")
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  book        Book?
-  course      Course?
+  id                String             @id @default(uuid())
+  title             String
+  description       String?
+  type              ResourceType
+  category          String?
+  tags              Json               @default("[]")
+  isPremium         Boolean            @default(false) @map("is_premium")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  book              Book?
+  course            Course?
+  learningPathItems LearningPathItem[]
+
+  @@index([type, createdAt])
+  @@index([category])
 
   @@map("resources")
 }
@@ -46,11 +53,11 @@ model Book {
 }
 
 model Course {
-  id            String       @id
+  id            String               @id
   instructor    String
-  durationHours Int          @map("duration_hours")
-  modules       Json         @default("[]")
-  resource      Resource     @relation(fields: [id], references: [id], onDelete: Cascade)
+  durationHours Int                  @map("duration_hours")
+  modules       Json                 @default("[]")
+  resource      Resource             @relation(fields: [id], references: [id], onDelete: Cascade)
   enrollments   Enrollment[]
 
   @@map("courses")
@@ -67,22 +74,96 @@ model BorrowRecord {
   user       User         @relation(fields: [userId], references: [id])
   book       Book         @relation(fields: [bookId], references: [id])
 
+  @@index([userId, status])
+  @@index([dueDate, status])
+  @@index([bookId, status])
+
   @@map("borrow_records")
 }
 
 model Enrollment {
-  id              String           @id @default(uuid())
-  userId          String           @map("user_id")
-  courseId        String           @map("course_id")
-  enrolledAt      DateTime         @default(now()) @map("enrolled_at")
-  progressPercent Int              @default(0) @map("progress_percent")
-  completedAt     DateTime?        @map("completed_at")
-  status          EnrollmentStatus @default(ACTIVE)
-  user            User             @relation(fields: [userId], references: [id])
-  course          Course           @relation(fields: [courseId], references: [id])
+  id              String               @id @default(uuid())
+  userId          String               @map("user_id")
+  courseId        String               @map("course_id")
+  enrolledAt      DateTime             @default(now()) @map("enrolled_at")
+  progressPercent Int                  @default(0) @map("progress_percent")
+  completedAt     DateTime?            @map("completed_at")
+  status          EnrollmentStatus     @default(ACTIVE)
+  user            User                 @relation(fields: [userId], references: [id])
+  course          Course               @relation(fields: [courseId], references: [id])
+  moduleProgress  CourseModuleProgress[]
 
   @@unique([userId, courseId])
+  @@index([userId, status])
+  @@index([courseId, status])
   @@map("enrollments")
+}
+
+model CourseModuleProgress {
+  id           String      @id @default(uuid())
+  enrollmentId String      @map("enrollment_id")
+  moduleId     String      @map("module_id")
+  moduleIndex  Int         @map("module_index")
+  title        String
+  completed    Boolean     @default(false)
+  completedAt  DateTime?   @map("completed_at")
+  enrollment   Enrollment  @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, moduleId])
+  @@index([enrollmentId, moduleIndex])
+  @@map("course_module_progress")
+}
+
+model LearningPath {
+  id            String             @id @default(uuid())
+  title         String
+  description   String?
+  slug          String             @unique
+  difficulty    LearningDifficulty
+  estimatedHours Int               @map("estimated_hours")
+  tags          Json               @default("[]")
+  isPremium     Boolean            @default(false) @map("is_premium")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  items         LearningPathItem[]
+  userPaths     UserLearningPath[]
+
+  @@index([difficulty, createdAt])
+  @@index([isPremium, createdAt])
+  @@map("learning_paths")
+}
+
+model LearningPathItem {
+  id             String       @id @default(uuid())
+  learningPathId String       @map("learning_path_id")
+  resourceId     String       @map("resource_id")
+  position       Int
+  notes          String?
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  resource       Resource     @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([learningPathId, position])
+  @@index([learningPathId])
+  @@index([resourceId])
+  @@map("learning_path_items")
+}
+
+model UserLearningPath {
+  id               String                 @id @default(uuid())
+  userId           String                 @map("user_id")
+  learningPathId   String                 @map("learning_path_id")
+  startedAt        DateTime               @default(now()) @map("started_at")
+  completedAt      DateTime?              @map("completed_at")
+  status           UserLearningPathStatus @default(ACTIVE)
+  progressPercent  Int                    @default(0) @map("progress_percent")
+  completedItemIds Json                   @default("[]") @map("completed_item_ids")
+  user             User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learningPath     LearningPath           @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, learningPathId])
+  @@index([userId, status])
+  @@index([learningPathId, status])
+  @@map("user_learning_paths")
 }
 
 enum Role {
@@ -106,4 +187,16 @@ enum EnrollmentStatus {
   ACTIVE
   COMPLETED
   DROPPED
+}
+
+enum LearningDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum UserLearningPathStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
 }

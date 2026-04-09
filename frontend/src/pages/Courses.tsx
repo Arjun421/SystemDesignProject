@@ -33,8 +33,16 @@ const RAPIDAPI_KEY = 'ea58db5b8fmsh6d435775babb762p18cd81jsndb3bf719ff6c'
 const RAPIDAPI_HOST = 'udemy-coupons-courses-instructors-data-api.p.rapidapi.com'
 const LIMIT = 9
 
-const TOPICS = ['All', 'Web Development', 'Python', 'JavaScript', 'Data Science',
-  'Machine Learning', 'React', 'AWS', 'Design', 'Marketing', 'Excel']
+const USD_TO_INR = 84
+const PRICE_FILTERS = [
+  { value: 'all', label: 'All prices' },
+  { value: 'under-1000', label: 'Under Rs. 1,000' },
+  { value: '1000-2500', label: 'Rs. 1,000 - Rs. 2,500' },
+  { value: '2500-5000', label: 'Rs. 2,500 - Rs. 5,000' },
+  { value: 'above-5000', label: 'Above Rs. 5,000' },
+] as const
+
+type PriceFilterValue = typeof PRICE_FILTERS[number]['value']
 
 /* ── Helpers ── */
 function renderStars(rating: number) {
@@ -49,13 +57,59 @@ function formatHours(h: number) {
   return `${h.toFixed(1)}h`
 }
 
+function normalizeText(value: string | null | undefined) {
+  return (value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+}
+
+function buildCourseSearchText(item: CourseItem) {
+  const { course, coupon } = item
+  return normalizeText([
+    course.name,
+    course.topic,
+    course.language,
+    course.slug,
+    course.authors.map(author => author.name).join(' '),
+    coupon?.code,
+  ].filter(Boolean).join(' '))
+}
+
+function getCoursePriceInINR(item: CourseItem) {
+  const regularPrice = Number(item.coupon?.regular?.price ?? 0)
+  if (!regularPrice || Number.isNaN(regularPrice)) return null
+  return Math.round(regularPrice * USD_TO_INR)
+}
+
+function matchesPrice(item: CourseItem, priceFilter: PriceFilterValue) {
+  if (priceFilter === 'all') return true
+
+  const priceInINR = getCoursePriceInINR(item)
+  if (priceInINR === null) return false
+
+  switch (priceFilter) {
+    case 'under-1000':
+      return priceInINR < 1000
+    case '1000-2500':
+      return priceInINR >= 1000 && priceInINR <= 2500
+    case '2500-5000':
+      return priceInINR > 2500 && priceInINR <= 5000
+    case 'above-5000':
+      return priceInINR > 5000
+    default:
+      return true
+  }
+}
+
 /* ── Component ── */
 export default function Courses() {
   const [items, setItems] = useState<CourseItem[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
-  const [activeTopic, setActiveTopic] = useState('All')
+  const [priceFilter, setPriceFilter] = useState<PriceFilterValue>('all')
   const [page, setPage] = useState(1)
   const [cursors, setCursors] = useState<string[]>(['']) // index = page-1, value = cursor for that page
   const [hasMore, setHasMore] = useState(false)
@@ -108,15 +162,10 @@ export default function Courses() {
   }
 
   const filteredItems = items.filter(item => {
-    const c = item.course
-    const matchTopic = activeTopic === 'All' ||
-      (c.topic?.toLowerCase().includes(activeTopic.toLowerCase())) ||
-      (c.name?.toLowerCase().includes(activeTopic.toLowerCase()))
-    const matchSearch = !search ||
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      (c.topic?.toLowerCase().includes(search.toLowerCase())) ||
-      c.authors.some(a => a.name.toLowerCase().includes(search.toLowerCase()))
-    return matchTopic && matchSearch
+    const searchableText = buildCourseSearchText(item)
+    const matchSearch = !search || searchableText.includes(normalizeText(search))
+    const matchPrice = matchesPrice(item, priceFilter)
+    return matchSearch && matchPrice
   })
 
   const goNext = () => {
@@ -145,20 +194,23 @@ export default function Courses() {
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by title, topic, or instructor..."
             />
+            <div className="courses-filter-group">
+              <label className="courses-filter-label" htmlFor="price-filter">Price</label>
+              <select
+                id="price-filter"
+                className="courses-filter-select"
+                value={priceFilter}
+                onChange={e => setPriceFilter(e.target.value as PriceFilterValue)}
+              >
+                {PRICE_FILTERS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button type="submit" className="courses-search-btn">Search</button>
           </form>
-
-          <div className="topic-filters">
-            {TOPICS.map(t => (
-              <button
-                key={t}
-                className={`topic-chip${activeTopic === t ? ' active' : ''}`}
-                onClick={() => setActiveTopic(t)}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 

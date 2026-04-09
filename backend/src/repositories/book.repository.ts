@@ -1,4 +1,8 @@
+import { Prisma } from '@prisma/client'
 import prisma from '../config/prisma'
+import { conflict, notFound } from '../errors/app-error'
+
+const activeBorrowStatuses = ['ACTIVE', 'OVERDUE'] as const
 
 export const bookRepository = {
   findById: (id: string) => {
@@ -8,63 +12,137 @@ export const bookRepository = {
     })
   },
 
+  markOverdueBorrows: async (userId?: string) => {
+    await prisma.borrowRecord.updateMany({
+      where: {
+        ...(userId && { userId }),
+        status: 'ACTIVE',
+        dueDate: { lt: new Date() },
+      },
+      data: { status: 'OVERDUE' },
+    })
+  },
+
   borrow: async (userId: string, bookId: string) => {
     const dueDate = new Date()
-    dueDate.setDate(dueDate.getDate() + 14) // 14 day borrow period
+    dueDate.setDate(dueDate.getDate() + 14)
 
     return prisma.$transaction(async (tx) => {
-      // Lock the book row and check availability
-      const book = await tx.book.findUnique({ where: { id: bookId } })
-      if (!book || book.availableCopies <= 0) {
-        throw { status: 409, message: 'No copies available' }
-      }
-
-      // Check borrow limit (max 3)
       const activeCount = await tx.borrowRecord.count({
-        where: { userId, status: 'ACTIVE' },
+        where: {
+          userId,
+          status: { in: [...activeBorrowStatuses] },
+        },
       })
       if (activeCount >= 3) {
-        throw { status: 409, message: 'Borrow limit reached (max 3)' }
+        throw conflict('Borrow limit reached (max 3)')
       }
 
-      // Check duplicate borrow
       const existing = await tx.borrowRecord.findFirst({
-        where: { userId, bookId, status: 'ACTIVE' },
+        where: {
+          userId,
+          bookId,
+          status: { in: [...activeBorrowStatuses] },
+        },
       })
-      if (existing) throw { status: 409, message: 'Already borrowed this book' }
+      if (existing) {
+        throw conflict('Already borrowed this book')
+      }
 
-      // Create record and decrement copies atomically
-      const [record] = await Promise.all([
-        tx.borrowRecord.create({ data: { userId, bookId, dueDate } }),
-        tx.book.update({
-          where: { id: bookId },
-          data: { availableCopies: { decrement: 1 } },
-        }),
-      ])
+      const decremented = await tx.book.updateMany({
+        where: {
+          id: bookId,
+          availableCopies: { gt: 0 },
+        },
+        data: {
+          availableCopies: { decrement: 1 },
+        },
+      })
 
-      return record
+      if (decremented.count === 0) {
+        throw conflict('No copies available')
+      }
+
+      return tx.borrowRecord.create({
+        data: { userId, bookId, dueDate },
+      })
+    }, {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     })
   },
 
   return: async (userId: string, bookId: string) => {
     return prisma.$transaction(async (tx) => {
       const record = await tx.borrowRecord.findFirst({
-        where: { userId, bookId, status: 'ACTIVE' },
+        where: {
+          userId,
+          bookId,
+          status: { in: [...activeBorrowStatuses] },
+        },
       })
-      if (!record) throw { status: 404, message: 'No active borrow record found' }
 
-      const [updated] = await Promise.all([
-        tx.borrowRecord.update({
-          where: { id: record.id },
-          data: { status: 'RETURNED', returnedAt: new Date() },
-        }),
-        tx.book.update({
-          where: { id: bookId },
-          data: { availableCopies: { increment: 1 } },
-        }),
-      ])
+      if (!record) {
+        throw notFound('No active borrow record found')
+      }
+
+      const updated = await tx.borrowRecord.update({
+        where: { id: record.id },
+        data: {
+          status: 'RETURNED',
+          returnedAt: new Date(),
+        },
+      })
+
+      await tx.book.update({
+        where: { id: bookId },
+        data: {
+          availableCopies: { increment: 1 },
+        },
+      })
 
       return updated
+    }, {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     })
+  },
+
+  getBorrowHistory: async (userId: string) => {
+    await bookRepository.markOverdueBorrows(userId)
+
+    return prisma.borrowRecord.findMany({
+      where: { userId },
+      include: { book: { include: { resource: true } } },
+      orderBy: { borrowedAt: 'desc' },
+    })
+  },
+
+  getActiveBorrows: async (userId: string) => {
+    await bookRepository.markOverdueBorrows(userId)
+
+    return prisma.borrowRecord.findMany({
+      where: {
+        userId,
+        status: { in: [...activeBorrowStatuses] },
+      },
+      include: { book: { include: { resource: true } } },
+      orderBy: { dueDate: 'asc' },
+    })
+  },
+
+  getUserBorrowedResourceIds: async (userId: string) => {
+    const records = await prisma.borrowRecord.findMany({
+      where: { userId },
+      select: {
+        book: {
+          select: {
+            resource: {
+              select: { id: true },
+            },
+          },
+        },
+      },
+    })
+
+    return records.map((record) => record.book.resource.id)
   },
 }
