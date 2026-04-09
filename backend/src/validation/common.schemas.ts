@@ -21,3 +21,8 @@ export const searchQuerySchema = z.object({
   type: z.enum(['book', 'course']).optional(),
   isPremium: z.coerce.boolean().optional(),
 })
+// Date range validation schema
+export const dateRangeSchema = z.object({
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+})
