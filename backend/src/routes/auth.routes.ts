@@ -33,16 +33,26 @@ router.get(
 router.get(
   '/google/callback',
   ensureGoogleOAuthConfigured,
-  passport.authenticate('google', {
-    session: false,
-    failureRedirect: `${process.env.FRONTEND_URL}/login?error=oauth_failed`,
-  }),
-  (req: any, res: any) => {
-    const user = req.user as { id: string; username: string; email: string; role: any }
-    const result = authService.createTokenForUser(user)
-    const userPayload = encodeURIComponent(JSON.stringify(result.user))
-
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${result.token}&user=${userPayload}`)
+  (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate('google', {
+      session: false,
+    }, (err: any, user: any) => {
+      if (err) {
+        console.error('[Google OAuth Error]', err)
+        return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`)
+      }
+      if (!user) {
+        return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`)
+      }
+      try {
+        const result = authService.createTokenForUser(user)
+        const userPayload = encodeURIComponent(JSON.stringify(result.user))
+        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${result.token}&user=${userPayload}`)
+      } catch (e) {
+        console.error('[Google OAuth Token Error]', e)
+        res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`)
+      }
+    })(req, res, next)
   }
 )
 
