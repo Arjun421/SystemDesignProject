@@ -7,8 +7,6 @@ import authRoutes from './routes/auth.routes'
 import resourceRoutes from './routes/resource.routes'
 import bookRoutes from './routes/book.routes'
 import courseRoutes from './routes/course.routes'
-import learningPathRoutes from './routes/learning-path.routes'
-import recommendationRoutes from './routes/recommendation.routes'
 import { errorHandler, notFoundHandler } from './middleware/error.middleware'
 
 dotenv.config()
@@ -35,8 +33,6 @@ app.use('/api/auth', authRoutes)
 app.use('/api/resources', resourceRoutes)
 app.use('/api/books', bookRoutes)
 app.use('/api/courses', courseRoutes)
-app.use('/api/learning-paths', learningPathRoutes)
-app.use('/api/recommendations', recommendationRoutes)
 
 app.use(notFoundHandler)
 app.use(errorHandler)
