@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import AnimatedStatsStrip from '../components/AnimatedStatsStrip'
 import RotatingHeroHeadline from '../components/RotatingHeroHeadline'
 import '../styles/home.css'
 
@@ -83,21 +84,7 @@ export default function Home() {
       </section>
 
       {/* ── NUMBERS ── */}
-      <div className="numbers-strip">
-        <div className="numbers-inner">
-          {[
-            { val: '8K+',   lbl: 'Books in library' },
-            { val: '300+',  lbl: 'Online courses' },
-            { val: '25K+',  lbl: 'Active members' },
-            { val: '14d',   lbl: 'Lending period' },
-          ].map(n => (
-            <div className="number-item" key={n.lbl}>
-              <div className="number-val">{n.val}</div>
-              <div className="number-lbl">{n.lbl}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <AnimatedStatsStrip />
 
       {/* ── HOW IT WORKS ── */}
       <section className="section">
