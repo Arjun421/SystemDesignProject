@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import RotatingHeroHeadline from '../components/RotatingHeroHeadline'
 import '../styles/home.css'
 
 export default function Home() {
@@ -12,9 +13,8 @@ export default function Home() {
       <section className="hero">
         <div className="hero-left fade-up">
           <div className="hero-eyebrow">✦ Digital Library & Learning Platform</div>
-          <h1 className="hero-title">Read more.<br />Learn faster.<br /><span style={{color:'#16a34a'}}>Grow further.</span></h1>
-          <p className="hero-sub">Borrow books, enroll in courses, and track everything — one platform.</p>
-          <div className="hero-actions">
+          <RotatingHeroHeadline />
+          <div className="hero-actions mt-9 flex-wrap justify-center lg:justify-start">
             <Link to={user ? '/dashboard' : '/register'} className="btn-primary-dark">
               Get started free →
             </Link>
