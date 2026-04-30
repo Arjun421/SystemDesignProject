@@ -1,9 +1,4 @@
-/**
- * TEMPLATE METHOD PATTERN — Base Workflow
- *
- * Defines the fixed skeleton of an operation (validate → execute → postProcess).
- * Subclasses fill in the specific steps without changing the overall flow.
- */
+
 
 export abstract class BaseWorkflow<TInput, TOutput> {
   // Template method — fixed order, cannot be overridden

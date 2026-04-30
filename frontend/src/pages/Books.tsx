@@ -1,9 +1,156 @@
 import { useEffect, useState } from 'react'
+import api from '../api/axios'
 
 const DEFAULT_QUERY = 'programming'
 const MAX_RESULTS = 12
-const GOOGLE_BOOKS_ENDPOINT = 'https://www.googleapis.com/books/v1/volumes'
-const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY ?? ''
+
+/* ── Fallback Books (when API fails) ── */
+const FALLBACK_BOOKS: LibraryBook[] = [
+  {
+    id: '550e8400-e29b-41d4-a716-446655440001',
+    title: 'Clean Code: A Handbook of Agile Software Craftsmanship',
+    author: 'Robert C. Martin',
+    category: 'Programming',
+    thumbnail: 'https://books.google.com/books/content?id=hjEFCAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.5,
+    ratingsCount: 1250,
+    pageCount: 464,
+    publishedDate: '2008',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440002',
+    title: 'Design Patterns: Elements of Reusable Object-Oriented Software',
+    author: 'Erich Gamma',
+    category: 'Software Engineering',
+    thumbnail: 'https://books.google.com/books/content?id=6oHuKQe3TjQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.7,
+    ratingsCount: 890,
+    pageCount: 395,
+    publishedDate: '1994',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440003',
+    title: 'The Pragmatic Programmer',
+    author: 'Andrew Hunt',
+    category: 'Programming',
+    thumbnail: 'https://books.google.com/books/content?id=5wBQEp6ruIAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.6,
+    ratingsCount: 1100,
+    pageCount: 352,
+    publishedDate: '1999',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440004',
+    title: 'JavaScript: The Good Parts',
+    author: 'Douglas Crockford',
+    category: 'JavaScript',
+    thumbnail: 'https://books.google.com/books/content?id=PXa2bby0oQ0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.3,
+    ratingsCount: 780,
+    pageCount: 176,
+    publishedDate: '2008',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440005',
+    title: 'Introduction to Algorithms',
+    author: 'Thomas H. Cormen',
+    category: 'Computer Science',
+    thumbnail: 'https://books.google.com/books/content?id=NLngYyWFl_YC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.8,
+    ratingsCount: 2100,
+    pageCount: 1312,
+    publishedDate: '2009',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440006',
+    title: 'Refactoring: Improving the Design of Existing Code',
+    author: 'Martin Fowler',
+    category: 'Software Engineering',
+    thumbnail: 'https://books.google.com/books/content?id=1MsETFPD3I0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.5,
+    ratingsCount: 950,
+    pageCount: 448,
+    publishedDate: '1999',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440007',
+    title: 'You Don\'t Know JS: Scope & Closures',
+    author: 'Kyle Simpson',
+    category: 'JavaScript',
+    thumbnail: 'https://books.google.com/books/content?id=e1qdBgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.4,
+    ratingsCount: 620,
+    pageCount: 98,
+    publishedDate: '2014',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440008',
+    title: 'Head First Design Patterns',
+    author: 'Eric Freeman',
+    category: 'Programming',
+    thumbnail: 'https://books.google.com/books/content?id=NXIrAQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.6,
+    ratingsCount: 1400,
+    pageCount: 694,
+    publishedDate: '2004',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440009',
+    title: 'Code Complete',
+    author: 'Steve McConnell',
+    category: 'Software Engineering',
+    thumbnail: 'https://books.google.com/books/content?id=LpVCAwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.7,
+    ratingsCount: 1800,
+    pageCount: 960,
+    publishedDate: '2004',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440010',
+    title: 'Eloquent JavaScript',
+    author: 'Marijn Haverbeke',
+    category: 'JavaScript',
+    thumbnail: 'https://books.google.com/books/content?id=p1v6DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.5,
+    ratingsCount: 890,
+    pageCount: 472,
+    publishedDate: '2018',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440011',
+    title: 'The Mythical Man-Month',
+    author: 'Frederick P. Brooks Jr.',
+    category: 'Software Engineering',
+    thumbnail: 'https://books.google.com/books/content?id=Yq35BY5Fk3gC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+    rating: 4.4,
+    ratingsCount: 670,
+    pageCount: 336,
+    publishedDate: '1995',
+    previewLink: null,
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440012',
+    title: 'Cracking the Coding Interview',
+    author: 'Gayle Laakmann McDowell',
+    category: 'Programming',
+    thumbnail: 'https://books.google.com/books/content?id=jD8iswEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+    rating: 4.6,
+    ratingsCount: 3200,
+    pageCount: 687,
+    publishedDate: '2015',
+    previewLink: null,
+  },
+]
 
 /* ── Types ── */
 export interface LibraryBook {
@@ -19,51 +166,7 @@ export interface LibraryBook {
   previewLink: string | null
 }
 
-interface GoogleBooksResponse {
-  items?: GoogleBookVolume[]
-}
-
-interface GoogleBookVolume {
-  id: string
-  volumeInfo?: {
-    title?: string
-    authors?: string[]
-    categories?: string[]
-    averageRating?: number
-    ratingsCount?: number
-    pageCount?: number
-    publishedDate?: string
-    previewLink?: string
-    infoLink?: string
-    imageLinks?: {
-      thumbnail?: string
-      smallThumbnail?: string
-    }
-  }
-}
-
 /* ── Helpers ── */
-function normalizeThumbnail(thumbnail?: string) {
-  return thumbnail ? thumbnail.replace('http://', 'https://') : null
-}
-
-function mapBooks(items: GoogleBookVolume[] = []): LibraryBook[] {
-  return items.slice(0, MAX_RESULTS).map(item => ({
-    id: item.id,
-    title: item.volumeInfo?.title?.trim() || 'Untitled Book',
-    author: item.volumeInfo?.authors?.[0] || 'Unknown Author',
-    category: item.volumeInfo?.categories?.[0] || 'Programming',
-    thumbnail: normalizeThumbnail(
-      item.volumeInfo?.imageLinks?.thumbnail ?? item.volumeInfo?.imageLinks?.smallThumbnail
-    ),
-    rating: item.volumeInfo?.averageRating ?? null,
-    ratingsCount: item.volumeInfo?.ratingsCount ?? null,
-    pageCount: item.volumeInfo?.pageCount ?? null,
-    publishedDate: item.volumeInfo?.publishedDate ?? null,
-    previewLink: item.volumeInfo?.previewLink ?? item.volumeInfo?.infoLink ?? null,
-  }))
-}
-
 function renderStars(rating: number) {
   const full = Math.floor(rating)
   const half = rating - full >= 0.5
@@ -156,16 +259,11 @@ function BookCard({ book }: { book: LibraryBook }) {
               target="_blank"
               rel="noopener noreferrer"
               className="btn-enroll-free"
+              style={{ textDecoration: 'none', textAlign: 'center' }}
             >
               Preview Book →
             </a>
           )}
-          <button
-            className="btn-view-course"
-            onClick={() => alert(`Borrow: ${book.title}`)}
-          >
-            Borrow
-          </button>
         </div>
       </div>
     </div>
@@ -210,33 +308,86 @@ export default function Books() {
   }, [searchTerm])
 
   useEffect(() => {
-    const controller = new AbortController()
-
-    async function fetchBooks() {
+    const fetchBooksFromAPI = async () => {
       setLoading(true)
       setError('')
+      
       try {
-        const url = new URL(GOOGLE_BOOKS_ENDPOINT)
-        url.searchParams.set('q', debouncedSearch)
-        url.searchParams.set('maxResults', String(MAX_RESULTS))
-        if (GOOGLE_BOOKS_API_KEY) url.searchParams.set('key', GOOGLE_BOOKS_API_KEY)
-
-        const response = await fetch(url.toString(), { signal: controller.signal })
-        if (!response.ok) throw new Error('Unable to fetch books right now.')
-
-        const data = (await response.json()) as GoogleBooksResponse
-        setBooks(mapBooks(data.items))
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') return
-        setBooks([])
-        setError('Something went wrong while loading books. Try a different keyword.')
+        // Try backend API first
+        const response = await api.get('/resources', {
+          params: {
+            type: 'BOOK',
+            limit: 50,
+          }
+        })
+        
+        const apiBooks = response.data.data.map((resource: any) => ({
+          id: resource.id,
+          title: resource.title,
+          author: resource.book?.author || 'Unknown Author',
+          category: resource.category || 'General',
+          thumbnail: null,
+          rating: null,
+          ratingsCount: null,
+          pageCount: null,
+          publishedDate: null,
+          previewLink: null,
+        }))
+        
+        // Filter by search term
+        const searchLower = debouncedSearch.toLowerCase()
+        const filtered = apiBooks.filter((book: LibraryBook) => 
+          book.title.toLowerCase().includes(searchLower) ||
+          book.author.toLowerCase().includes(searchLower) ||
+          book.category.toLowerCase().includes(searchLower)
+        )
+        
+        setBooks(filtered.length > 0 ? filtered : apiBooks)
+      } catch (backendErr) {
+        console.warn('Backend API failed, trying Open Library API:', backendErr)
+        
+        try {
+          // Fallback to Open Library API (free, no rate limit)
+          const searchQuery = debouncedSearch || 'programming'
+          const openLibResponse = await fetch(
+            `https://openlibrary.org/search.json?q=${encodeURIComponent(searchQuery)}&limit=12`
+          )
+          const openLibData = await openLibResponse.json()
+          
+          const openLibBooks = (openLibData.docs || []).map((doc: any) => ({
+            id: doc.key?.replace('/works/', '') || Math.random().toString(),
+            title: doc.title || 'Untitled',
+            author: doc.author_name?.[0] || 'Unknown Author',
+            category: doc.subject?.[0] || 'General',
+            thumbnail: doc.cover_i 
+              ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
+              : null,
+            rating: null,
+            ratingsCount: null,
+            pageCount: doc.number_of_pages_median || null,
+            publishedDate: doc.first_publish_year?.toString() || null,
+            previewLink: `https://openlibrary.org${doc.key}`,
+          }))
+          
+          setBooks(openLibBooks.length > 0 ? openLibBooks : FALLBACK_BOOKS)
+        } catch (openLibErr) {
+          console.warn('Open Library API also failed, using fallback:', openLibErr)
+          // Final fallback to hardcoded books
+          const searchLower = debouncedSearch.toLowerCase()
+          const filtered = FALLBACK_BOOKS.filter(book => 
+            book.title.toLowerCase().includes(searchLower) ||
+            book.author.toLowerCase().includes(searchLower) ||
+            book.category.toLowerCase().includes(searchLower)
+          )
+          setBooks(filtered.length > 0 ? filtered : FALLBACK_BOOKS)
+          setError('⚠️ Using sample books')
+        }
       } finally {
-        if (!controller.signal.aborted) setLoading(false)
+        setLoading(false)
       }
     }
-
-    fetchBooks()
-    return () => controller.abort()
+    
+    fetchBooksFromAPI()
   }, [debouncedSearch])
 
   return (
@@ -287,7 +438,12 @@ export default function Books() {
               ? Array.from({ length: MAX_RESULTS }).map((_, i) => <BookSkeletonCard key={i} />)
               : books.length === 0
                 ? <div className="courses-empty">No books found. Try a different search.</div>
-                : books.map(book => <BookCard key={book.id} book={book} />)
+                : books.map(book => (
+                    <BookCard 
+                      key={book.id} 
+                      book={book}
+                    />
+                  ))
             }
           </div>
         )}

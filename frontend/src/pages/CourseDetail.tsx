@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import api from '../api/axios'
 import '../styles/course-detail.css'
 import { toINR } from '../utils/currency'
 
@@ -26,6 +28,8 @@ function renderStars(r: number) {
 
 export default function CourseDetail() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const [course,    setCourse]    = useState<CourseData | null>(null)
   const [authors,   setAuthors]   = useState<Author[]>([])
   const [coupon,    setCoupon]    = useState<CouponData | null>(null)
@@ -34,6 +38,8 @@ export default function CourseDetail() {
   const [wishlisted,setWishlisted]= useState(false)
   const [copied,    setCopied]    = useState(false)
   const [showFull,  setShowFull]  = useState(false)
+  const [enrolling, setEnrolling] = useState(false)
+  const [enrollMessage, setEnrollMessage] = useState<{ text: string; ok: boolean } | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -51,6 +57,35 @@ export default function CourseDetail() {
       .catch(e => setError(e.message))
       .finally(() => setLoading(false))
   }, [id])
+
+  const handleEnroll = async () => {
+    if (!user) {
+      setEnrollMessage({ text: '✗ Please login first', ok: false })
+      setTimeout(() => navigate('/login'), 1500)
+      return
+    }
+
+    if (!id) return
+
+    setEnrolling(true)
+    setEnrollMessage(null)
+    
+    try {
+      await api.post(`/courses/${id}/enroll`)
+      setEnrollMessage({ text: `✓ Tracked! Check Resources page.`, ok: true })
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setEnrollMessage({ text: '✗ Session expired. Please login again.', ok: false })
+        setTimeout(() => navigate('/login'), 1500)
+      } else if (err.response?.status === 400 || err.response?.status === 404) {
+        setEnrollMessage({ text: '✗ This is an external Udemy course. Use Resources page for internal courses.', ok: false })
+      } else {
+        setEnrollMessage({ text: `✗ ${err.response?.data?.error || 'Failed to track'}`, ok: false })
+      }
+    } finally {
+      setEnrolling(false)
+    }
+  }
 
   if (loading) return (
     <div className="cd-page">
@@ -151,6 +186,33 @@ export default function CourseDetail() {
               <a href={enrollUrl} target="_blank" rel="noopener noreferrer" className="btn-enroll-cta" style={{marginTop:10}}>
                 Enroll on Udemy →
               </a>
+              {enrollMessage && (
+                <div style={{ 
+                  fontSize: 12, 
+                  padding: '8px 10px', 
+                  borderRadius: 8,
+                  background: enrollMessage.ok ? '#e3f5ee' : '#fef2f2',
+                  color: enrollMessage.ok ? '#0f5c32' : '#991b1b',
+                  marginTop: 8,
+                }}>
+                  {enrollMessage.text}
+                </div>
+              )}
+              <button 
+                onClick={handleEnroll}
+                disabled={enrolling}
+                className="btn-wishlist"
+                style={{ 
+                  marginTop: 8,
+                  opacity: enrolling ? 0.6 : 1,
+                  cursor: enrolling ? 'not-allowed' : 'pointer',
+                  background: '#16a163',
+                  color: 'white',
+                  border: 'none',
+                }}
+              >
+                {enrolling ? 'Saving...' : '✓ I Enrolled'}
+              </button>
             </div>
           </div>
 
@@ -181,6 +243,33 @@ export default function CourseDetail() {
               <a href={enrollUrl} target="_blank" rel="noopener noreferrer" className="btn-enroll-cta">
                 Enroll on Udemy →
               </a>
+              {enrollMessage && (
+                <div style={{ 
+                  fontSize: 12, 
+                  padding: '8px 10px', 
+                  borderRadius: 8,
+                  background: enrollMessage.ok ? '#e3f5ee' : '#fef2f2',
+                  color: enrollMessage.ok ? '#0f5c32' : '#991b1b',
+                  marginBottom: 8,
+                }}>
+                  {enrollMessage.text}
+                </div>
+              )}
+              <button 
+                onClick={handleEnroll}
+                disabled={enrolling}
+                className="btn-wishlist"
+                style={{ 
+                  opacity: enrolling ? 0.6 : 1,
+                  cursor: enrolling ? 'not-allowed' : 'pointer',
+                  background: '#16a163',
+                  color: 'white',
+                  border: 'none',
+                  marginBottom: 8,
+                }}
+              >
+                {enrolling ? 'Saving...' : '✓ I Enrolled'}
+              </button>
               <button className={`btn-wishlist${wishlisted ? ' saved' : ''}`} onClick={() => setWishlisted(w => !w)}>
                 {wishlisted ? '♥ Saved to Wishlist' : '♡ Add to Wishlist'}
               </button>

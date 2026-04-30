@@ -109,7 +109,6 @@ export default function Navbar() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <Link to="/books" className="lv-link">Library</Link>
             <Link to="/courses" className="lv-link">Courses</Link>
-            {user && <Link to="/dashboard" className="lv-link">Dashboard</Link>}
           </div>
 
           {/* Right — theme toggle + auth */}

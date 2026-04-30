@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import '../styles/courses.css'
 import { toINR } from '../utils/currency'
 
@@ -105,6 +106,7 @@ function matchesPrice(item: CourseItem, priceFilter: PriceFilterValue) {
 
 /* ── Component ── */
 export default function Courses() {
+  const { user } = useAuth()
   const [items, setItems] = useState<CourseItem[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -311,10 +313,15 @@ export default function Courses() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-enroll-free"
+                        style={{ textDecoration: 'none', textAlign: 'center' }}
                       >
                         Enroll on Udemy →
                       </a>
-                      <Link to={`/courses/${c.id}`} className="btn-view-course">
+                      <Link
+                        to={`/courses/${c.id}`}
+                        className="btn-view-course"
+                        style={{ textDecoration: 'none', textAlign: 'center' }}
+                      >
                         Course Details
                       </Link>
                     </div>

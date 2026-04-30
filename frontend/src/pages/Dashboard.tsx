@@ -77,13 +77,13 @@ export default function Dashboard() {
       setLoading(true)
       try {
         const [a, h, e] = await Promise.all([
-          api.get('/books/active'),
-          api.get('/books/history'),
-          api.get('/courses/my-enrollments'),
+          api.get('/books/active').catch(() => ({ data: { data: [] } })),
+          api.get('/books/history').catch(() => ({ data: { data: [] } })),
+          api.get('/courses/my-enrollments').catch(() => ({ data: { data: [] } })),
         ])
-        setActive(a.data.data)
-        setHistory(h.data.data)
-        setEnrollments(e.data.data)
+        setActive(a.data.data || [])
+        setHistory(h.data.data || [])
+        setEnrollments(e.data.data || [])
       } catch { }
       finally { setLoading(false) }
     }
