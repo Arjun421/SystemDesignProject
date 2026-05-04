@@ -338,7 +338,7 @@ export default function Courses() {
             <button className="page-btn" onClick={goPrev} disabled={page === 1}>
               ← Previous
             </button>
-            <span className="page-info">Page {page}</span>
+            <span className="page-inf">Page {page}</span>
             <button className="page-btn" onClick={goNext} disabled={!hasMore}>
               Next →
             </button>
